@@ -1,7 +1,7 @@
-module DayFile
+module SolutionFile
   class << self
     def with(dir, &block)
-      input_filepath = File.join(dir, 'input.txt')
+      input_filepath = File.join(dir, '../input.txt')
       output_filepath = File.join(dir, 'output.txt')
 
       input_file = File.read input_filepath

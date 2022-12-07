@@ -1,6 +1,6 @@
-require_relative '../day_file'
+require 'solution_file'
 
-DayFile.with __dir__ do |input|
+SolutionFile.with __dir__ do |input|
   elf_lines = input.split "\n\n"
   elves = elf_lines.map { |elf_line| elf_line.split("\n").map(&:to_i) }
 
