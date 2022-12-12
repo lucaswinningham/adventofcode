@@ -8,7 +8,7 @@ class FileSystem
     end
   end
 
-  Dir = Struct.new(:name, :root, :dir, keyword_init: true) do
+  Dir = Struct.new(:name, :dir, keyword_init: true) do
     def dirs
       @dirs ||= Hash.new { |h, k| h[k] = Dir.new(name: k, dir: self) }
     end
@@ -43,7 +43,7 @@ class FileSystem
   end
 
   def root
-    @root ||= Dir.new root: true
+    @root ||= Dir.new
   end
 
   def pwd
