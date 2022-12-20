@@ -16,8 +16,6 @@ SolutionFile.with __dir__ do |input|
   register_value = 1
   signal_strength = 0
 
-  # puts "num_instructions: #{num_instructions}"
-
   stream.each do |instruction|
     case instruction[:name]
     when :addx

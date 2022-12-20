@@ -70,5 +70,5 @@ SolutionFile.with __dir__ do |input|
     Round.new(opponent: OPPONENT_MAP[round[0]], outcome: OUTCOME_MAP[round[1]])
   end
 
-  puts rounds.sum(&:score)
+  rounds.sum(&:score)
 end
