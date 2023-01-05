@@ -5,16 +5,15 @@
 Populate a new day with:
 
 ```sh
-# ruby bin/init.rb . 2023 1
-ruby bin/init.rb . [year] [day]
+./bin/init.rb --day 1
 ```
 
 This will create a directory structure in `.` with:
 
 ```txt
 .
-├─── [year]
-│   └── day[day]
+├─── 2023
+│   └── day01
 │       ├── example_input.txt
 │       ├── input.rb
 │       ├── input.txt
@@ -65,15 +64,15 @@ Then manually populate the `input.txt`, `example_input.txt`, `thoughts.md` and `
 Run a solution with:
 
 ```sh
-# ruby -I . [year]/[day]/[part]/solution.rb
-# ruby -I . -I ./other [year]/[day]/[part]/solution.rb
-# ruby -I . bin/run.rb 2023 1 2
-ruby -I . bin/run.rb [year] [day] [part]
+./bin/run.rb --day 1 --part 1
 ```
 
 Run with the example input instead:
 
 ```sh
-# ruby -I . bin/jog.rb 2023 1 2
-ruby -I . bin/jog.rb [year] [day] [part]
+./bin/jog.rb --day 1 --part 1
 ```
+
+## Precendence
+
+This document serves as the latest process, be sure to refer each year's `README.md` if applicable.
