@@ -4,7 +4,7 @@ require 'date'
 require 'fileutils'
 require 'optparse'
 
-require_relative './constants'
+require_relative 'utils/constants'
 
 options = {}
 option_parser = OptionParser.new do |opts|

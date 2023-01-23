@@ -4,7 +4,7 @@ require 'date'
 require 'benchmark'
 require 'optparse'
 
-require_relative './constants'
+require_relative 'utils/constants'
 
 options = {}
 option_parser = OptionParser.new do |opts|
@@ -52,7 +52,7 @@ input_file = File.read input_filepath
 
 the_output = `ruby #{solution_filepath}`
 
-if options.fetch(:benchmarks, false)
+if benchmarks
   Benchmark.bm do |x|
     x.report { puts block&.call(input_file) }
   end
