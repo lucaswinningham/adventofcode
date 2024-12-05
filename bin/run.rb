@@ -1,8 +1,9 @@
 #!/usr/bin/env ruby
 
-require 'date'
 require 'benchmark'
+require 'fileutils'
 require 'optparse'
+require 'time'
 
 require_relative 'utils/constants'
 
@@ -26,8 +27,8 @@ option_parser = OptionParser.new do |opts|
     options[:part] = v
   end
 
-  opts.on('-b', '--[no-]benchmarks', 'Report benchmarks, defaults to true') do |v|
-    options[:benchmarks] = v
+  opts.on('-j', '--[no-]jog', 'Run using the example input, defaults to false') do |v|
+    options[:jog] = v
   end
 
   opts.on('-h', '--help', 'Prints this help') { puts(opts).tap { exit } }
@@ -39,34 +40,43 @@ root = options.fetch(:root) { File.expand_path('..', __dir__) }
 year = options.fetch(:year) { Date.today.year }
 day = options.fetch(:day) { Date.today.year }
 part = options.fetch(:part) { puts(option_parser.help).tap { exit 1 } }
-benchmarks = options.fetch(:benchmarks, true)
+jog = options.fetch(:jog, true)
 
 year_directory = "#{root}/#{year}"
 day_directory = "#{year_directory}/day#{day.to_s.rjust(2, '0')}"
 part_directory = "#{day_directory}/part#{part}"
 
-input_filepath = "#{day_directory}/#{Constants.input_filename}"
-output_filepath = "#{part_directory}/#{Constants.output_filename}"
-
-input_file = File.read input_filepath
-
-the_output = `ruby #{solution_filepath}`
-
-if benchmarks
-  Benchmark.bm do |x|
-    x.report { puts block&.call(input_file) }
-  end
+solution_filepath = "#{part_directory}/#{Constants.solution_filename}"
+input_filepath = if jog
+  "#{day_directory}/#{Constants.example_input_filename}"
+else
+  "#{part_directory}/#{Constants.input_filename}"
 end
 
-result = with_result(options.merge(input_file: input_file), &block)
+require solution_filepath
 
-puts result
+input = File.read(input_filepath)
 
-File.write(output_filepath, "#{result}\n")
+answer = nil
 
-def with_result(options = {}, &block)
-  input_file = options.fetch(:input_file)
+realtime = Benchmark.realtime { answer = "Answer: #{Solution.call(input)}" }
+elapsed_time = realtime.round(3).to_f
+benchmark_report = "Took #{elapsed_time} seconds."
 
+puts answer
+puts benchmark_report
 
-  block&.call input_file
-end
+log_directory = "#{root}/log"
+year_directory = "#{log_directory}/#{year}"
+day_directory = "#{year_directory}/day#{day.to_s.rjust(2, '0')}"
+part_filename = "#{day_directory}/part#{part}.log"
+
+FileUtils.mkdir_p day_directory
+FileUtils.touch part_filename
+
+log_entry = "[#{Time.now.iso8601}]:\n"
+log_entry += "\t#{answer}\n"
+log_entry += "\t#{benchmark_report}\n"
+log_entry += "\n"
+
+File.write(part_filename, log_entry, mode: File::WRONLY|File::CREAT|File::APPEND)

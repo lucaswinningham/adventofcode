@@ -18,7 +18,7 @@ option_parser = OptionParser.new do |opts|
     options[:year] = v
   end
 
-  opts.on('-d DAY', '--day=DAY', 'Day of challenge, defaults to current day', Numeric) do |v|
+  opts.on('-d DAY', '--day=DAY', 'Day of challenge, required', Numeric) do |v|
     options[:day] = v
   end
 
@@ -29,40 +29,43 @@ option_parser.parse!
 
 root = options.fetch(:root) { File.expand_path('..', __dir__) }
 year = options.fetch(:year) { Date.today.year }
-day = options.fetch(:day) { Date.today.year }
-
-year_directory = "#{root}/#{year}"
-day_directory = "#{year_directory}/day#{day.to_s.rjust(2, '0')}"
+day = options.fetch(:day) { puts(option_parser.help).tap { exit 1 } }
 
 EEXISTS = File::WRONLY|File::CREAT|File::EXCL
 
-FileUtils.mkdir_p day_directory
-FileUtils.touch "#{day_directory}/#{Constants.example_input_filename}"
-FileUtils.touch "#{day_directory}/#{Constants.input_filename}"
-File.write("#{day_directory}/#{Constants.thoughts_filename}", Constants.thoughts_file(day: day), mode: EEXISTS)
-File.write("#{day_directory}/#{Constants.parser_filename}", Constants.parser_file, mode: EEXISTS)
+year_directory = "#{root}/#{year}"
+day_directory = "#{year_directory}/day#{day.to_s.rjust(2, '0')}"
+example_input_filename = "#{day_directory}/#{Constants.example_input_filename}"
+thoughts_filename = "#{day_directory}/#{Constants.thoughts_filename}"
+parse_filename = "#{day_directory}/#{Constants.parse_filename}"
+
+puts "creating directory: #{day_directory}"
+FileUtils.mkdir_p(day_directory)
+
+puts "touching file: #{example_input_filename}"
+FileUtils.touch(example_input_filename)
+
+puts "writing file: #{thoughts_filename}"
+File.write(thoughts_filename, Constants.thoughts_file(day: day), mode: EEXISTS)
+
+puts "writing file: #{parse_filename}"
+File.write(parse_filename, Constants.parse_file, mode: EEXISTS)
 
 [1, 2].each do |part|
   part_directory = "#{day_directory}/part#{part}"
-  FileUtils.mkdir_p part_directory
+  input_filename = "#{part_directory}/#{Constants.input_filename}"
+  problem_filename = "#{part_directory}/#{Constants.problem_filename}"
+  solution_filename = "#{part_directory}/#{Constants.solution_filename}"
 
-  FileUtils.touch "#{part_directory}/problem.txt"
-  File.write("#{part_directory}/solution.rb", Constants.solution_file, mode: EEXISTS)
+  puts "creating directory: #{part_directory}"
+  FileUtils.mkdir_p(part_directory)
+
+  puts "touching file: #{input_filename}"
+  FileUtils.touch(input_filename)
+
+  puts "touching file: #{problem_filename}"
+  FileUtils.touch(problem_filename)
+
+  puts "writing file: #{solution_filename}"
+  File.write(solution_filename, Constants.solution_file, mode: EEXISTS)
 end
-
-# # Testing cleanup
-
-# [1, 2].each do |part|
-#   part_directory = "#{day_directory}/part#{part}"
-
-#   FileUtils.rm "#{part_directory}/problem.txt"
-#   FileUtils.rm "#{part_directory}/solution.rb"
-#   FileUtils.rmdir part_directory
-# end
-
-# FileUtils.rm "#{day_directory}/#{Constants.example_input_filename}"
-# FileUtils.rm "#{day_directory}/#{Constants.input_filename}"
-# FileUtils.rm "#{day_directory}/#{Constants.thoughts_filename}"
-# FileUtils.rm "#{day_directory}/#{Constants.parser_filename}"
-# FileUtils.rmdir day_directory
-# FileUtils.rmdir year_directory

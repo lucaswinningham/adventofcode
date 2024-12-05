@@ -8,6 +8,10 @@ module Constants
       @input_filename ||= 'input.txt'
     end
 
+    def example_output_filename
+      @output_filename ||= 'example_output.txt'
+    end
+
     def output_filename
       @output_filename ||= 'output.txt'
     end
@@ -16,8 +20,16 @@ module Constants
       @thoughts_filename ||= 'thoughts.md'
     end
 
-    def parser_filename
-      @parser_filename ||= 'parser.rb'
+    def parse_filename
+      @parse_filename ||= 'parse.rb'
+    end
+
+    def problem_filename
+      @problem_filename ||= 'problem.md'
+    end
+
+    def solution_filename
+      @solution_filename ||= 'solution.rb'
     end
 
     def thoughts_file(options = {})
@@ -29,12 +41,13 @@ module Constants
         ## Part 1
 
         ## Part 2
+
       THOUGHTS
     end
 
-    def parser_file
-      @parser_file ||= <<~INPUT
-        module Parser
+    def parse_file
+      @parse_file ||= <<~INPUT
+        module Parse
           class << self
             def call(input)
               
@@ -46,6 +59,15 @@ module Constants
 
     def solution_file
       @solution_file ||= <<~SOLUTION
+        require_relative '../parse'
+
+        module Solution
+          class << self
+            def call(input)
+              parsed_input = Parse.call(input)
+            end
+          end
+        end
       SOLUTION
     end
   end
