@@ -40,7 +40,7 @@ root = options.fetch(:root) { File.expand_path('..', __dir__) }
 year = options.fetch(:year) { Date.today.year }
 day = options.fetch(:day) { Date.today.year }
 part = options.fetch(:part) { puts(option_parser.help).tap { exit 1 } }
-jog = options.fetch(:jog, true)
+jog = options.fetch(:jog, false)
 
 year_directory = "#{root}/#{year}"
 day_directory = "#{year_directory}/day#{day.to_s.rjust(2, '0')}"
