@@ -50,4 +50,4 @@ After each run, logs will be appended in `log/[year]/day[day]/part[part].log`.
 
 ## Precendence
 
-This document serves as documentation for the latest process, be sure to refer each year's `README.md` if applicable. Before changing this `README.md`, copy its current contents into previous years for which it applied.
+This document serves as documentation for the latest process, be sure to refer to each year's `README.md` if applicable. Before changing this `README.md`, copy its current contents into previous years for which it applied.
